@@ -1,6 +1,9 @@
 # Welcome to LFS Go Server
 
 ## Initialization
+
+> Be sure to set your GO_ENV prior to running these tasks
+
 ### Development
 * Run migrations `modl-migrate up`
 * Run the app `revel run github.com/memikequinn/lfs-server-go`
@@ -10,6 +13,8 @@ This should be packaged into a single binary and front-ended by a reverse proxy
 * Run migrations `modl-migrate up`
 * Start the server with `./lfs-server-go` until I get time to write an init script
 
+### Packaging 
+```GO_ENV=production revel package github.com/memikequinn/lfs-server-go```
 
 ## Getting Started
 
