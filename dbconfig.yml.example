@@ -1,0 +1,6 @@
+# Used ONLY for migrations
+development:
+  dialect: mysql
+  datasource: "root:@tcp(localhost:3306)/lfs_server_go?parseTime=true"
+  dir: db/migrations
+  table: migrations

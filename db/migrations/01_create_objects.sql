@@ -1,0 +1,11 @@
+-- +migrate Up
+CREATE TABLE objects (
+  id         INTEGER UNSIGNED AUTO_INCREMENT,
+  oid        VARCHAR(65),
+  created_at TIMESTAMP        DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+-- +migrate Down
+DROP TABLE objects;
