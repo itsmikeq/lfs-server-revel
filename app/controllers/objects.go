@@ -3,6 +3,7 @@ import (
 	"encoding/json"
 	"github.com/revel/revel"
 	"github.com/memikequinn/lfs-server-go/app/models"
+	"fmt"
 )
 type Objects struct {
 	GorpController
@@ -40,7 +41,7 @@ func (c Objects) List() revel.Result {
 	objects, err := c.Txn.Select(models.Object{},
 		`SELECT * FROM Object WHERE Id > ? LIMIT ?`, lastId, limit)
 	if err != nil {
-		return c.RenderText(
+		return c.RenderJson(
 			"Error trying to get records from DB.")
 	}
 	return c.RenderJson(objects)
@@ -49,21 +50,29 @@ func (c Objects) List() revel.Result {
 func (c Objects) Update(id int64) revel.Result {
 	object, err := c.parseObjectRequest()
 	if err != nil {
-		return c.RenderText("Unable to parse the Objects from JSON.")
+		return c.RenderJson("Unable to parse the Objects from JSON.")
 	}
 	// Ensure the Id is set.
-	object.Id = id
+//	object.Id = id
 	success, err := c.Txn.Update(&object)
 	if err != nil || success == 0 {
-		return c.RenderText("Unable to update bid item.")
+		return c.RenderJson("Unable to update bid item.")
 	}
-	return c.RenderText("Updated %v", id)
+	return c.RenderJson(fmt.Sprintf("Updated %v", id))
 }
 
-func (c Objects) Delete(id int64) revel.Result {
-	success, err := c.Txn.Delete(&models.Object{Id: int64(id)})
+func (c Objects) Delete(oid string) revel.Result {
+	success, err := c.Txn.Delete(&models.Object{Oid: oid})
 	if err != nil || success == 0 {
-		return c.RenderText("Failed to remove Objects")
+		return c.RenderJson("Failed to remove Objects")
 	}
-	return c.RenderText("Deleted %v", id)
+	return c.RenderJson(fmt.Sprintf("Deleted %v", oid))
+}
+
+func (c Objects) Find(oid string) revel.Result {
+	success, err := c.Txn.Delete(&models.Object{Oid: oid})
+	if err != nil || success == 0 {
+		return c.RenderJson("Failed to remove Objects")
+	}
+	return c.RenderJson(fmt.Sprintf("Deleted %v", oid))
 }

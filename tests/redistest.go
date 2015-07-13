@@ -14,23 +14,23 @@ func (t *RedisTest) Before() {
 }
 
 func (t *RedisTest) TestRedisTestLoads() {
-	t.AssertEqual(true,true)
+	t.AssertEqual(true, true)
 }
 
 func (t *RedisTest) TestDefaultRedisConfig() {
 	config := &services.RedisConfig{}
 	services.SetRedisConfig(config)
-	t.AssertEqual("localhost:6379",config.Addr)
-	t.AssertEqual("",config.Password)
-	t.AssertEqual(0,config.DB)
+	t.AssertEqual("localhost:6379", config.Addr)
+	t.AssertEqual("", config.Password)
+	t.AssertEqual(0, config.DB)
 }
 
 func (t *RedisTest) TestRedisConfigWithArgs() {
 	config := &services.RedisConfig{Addr: "somehost:6379"}
 	services.SetRedisConfig(config)
-	t.AssertEqual("somehost:6379",config.Addr)
-	t.AssertEqual("",config.Password)
-	t.AssertEqual(0,config.DB)
+	t.AssertEqual("somehost:6379", config.Addr)
+	t.AssertEqual("", config.Password)
+	t.AssertEqual(0, config.DB)
 }
 
 func (t *RedisTest) TestRedisNewClient() {

@@ -2,13 +2,14 @@ package models
 import (
 	"github.com/revel/revel"
 	"time"
+	"io"
 )
 
 type Object struct {
-	Id              int64   `db:"id" json:"id"`
-	Oid            string  `db:"oid" json:"oid"`
-	CreatedAt      time.Time  `db:"created_at" json:"created_at"`
-	UpdatedAt      time.Time  `db:"updated_at" json:"updated_at"`
+	Oid            string `db:"oid" json:"oid"`
+	CreatedAt      time.Time `db:"created_at" json:"created_at"`
+	UpdatedAt      time.Time
+	Content io.Reader
 }
 
 func (o *Object) Validate(v *revel.Validation) {
@@ -16,4 +17,14 @@ func (o *Object) Validate(v *revel.Validation) {
 	v.Check(o.Oid,
 		revel.ValidRequired(),
 		revel.ValidMaxSize(65))
+}
+
+func FindObject(oid string) (*Object) {
+	RedisClient.Get(oid)
+	return &Object{Oid: oid}
+}
+
+func SaveObject(oid string) (*Object) {
+	RedisClient.Set(oid, 1, -1)
+	return &Object{Oid: oid, CreatedAt: time.Now()}
 }

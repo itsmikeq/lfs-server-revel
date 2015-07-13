@@ -5,7 +5,6 @@ import (
 	"github.com/revel/revel"
 	_ "github.com/go-sql-driver/mysql"
 	"strings"
-	"github.com/memikequinn/lfs-server-go/app/models"
 	"fmt"
 )
 
@@ -94,7 +93,7 @@ var InitDB func() = func(){
 	}
 	// Defines the table for use by GORP
 	// This is a function we will create soon.
-	defineObjectTable(Dbm)
+//	defineObjectTable(Dbm)
 	if err := Dbm.CreateTablesIfNotExists(); err != nil {
 		revel.ERROR.Fatal(err)
 	}
@@ -102,12 +101,12 @@ var InitDB func() = func(){
 
 // Set up tables here - a bit janky but it looks like you need to
 // define tables manually
-func defineObjectTable(dbm *gorp.DbMap){
-	// set "id" as primary key and autoincrement
-	t := dbm.AddTable(models.Object{}).SetKeys(true, "id")
-	// e.g. VARCHAR(25)
-	t.ColMap("oid").SetMaxSize(65)
-}
+//func defineObjectTable(dbm *gorp.DbMap){
+//	// set "id" as primary key and autoincrement
+//	t := dbm.AddTable(models.Object{}).SetKeys(true, "id")
+//	// e.g. VARCHAR(25)
+//	t.ColMap("oid").SetMaxSize(65)
+//}
 
 func getParamString(param string, defaultValue string) string {
 	p, found := revel.Config.String(param)
