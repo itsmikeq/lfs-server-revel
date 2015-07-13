@@ -1,4 +1,4 @@
 #!/bin/bash
 # Use development if its not set
-${GO_ENV:-development}
-revel run github.com/memikequinn/lfs-server-go
+GO_ENV=${GO_ENV:-dev}
+revel run github.com/memikequinn/lfs-server-go $GO_ENV

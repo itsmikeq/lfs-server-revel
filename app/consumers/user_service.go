@@ -7,6 +7,8 @@ package consumers
 import (
 	"fmt"
 	"io"
+	"github.com/revel/revel"
+
 )
 
 // declare the type of UserAccessGetter
@@ -30,10 +32,24 @@ type UserService struct {
 	Downloader *Downloader
 }
 const BASE_URL = "http://localhost:3001/get_page"
+var AllowedActions = []string{"download", "push", "force_push", "admin"}
+func vetAction(uareq UserAccessRequest) bool {
+	for _, b :=  range AllowedActions {
+		if b == uareq.Action {
+			return true
+		}
+	}
+	return false
+}
 
 func NewUserService(base string, uareq UserAccessRequest) *Downloader {
 //	rr := new(UserAccessResponse)
-	return NewDownloader(fmt.Sprintf("%s?username=%s&project=%s&action=%s", BASE_URL, uareq.Username, uareq.Project, uareq.Action), new(UserAccessResponse))
+	uar := new(UserAccessResponse)
+	if vetAction(uareq) != true {
+		revel.ERROR.Println(uareq.Action, "is not in AllowedActions")
+		uar.Message = fmt.Sprintf("%s is not in AllowedActions", uareq.Action)
+	}
+	return NewDownloader(fmt.Sprintf("%s?username=%s&project=%s&action=%s", BASE_URL, uareq.Username, uareq.Project, uareq.Action), uar)
 }
 
 func (downloader *Downloader) Can() bool {

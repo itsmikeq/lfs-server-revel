@@ -50,6 +50,14 @@ func (t *AppTest) TestThatConsumerUserServiceRespondsWhenFalse() {
 	t.AssertEqual(false, downloader.Can())
 }
 
+func (t *AppTest) TestThatConsumerUserServiceSetsMessageWhenInvalidAction() {
+	uar := &consumers.UserAccessRequest{Username:"testuser", Project:"testproject", Action:"poo"}
+	downloader := consumers.NewUserService("http://somewhere.net", *uar)
+	t.AssertEqual(false, downloader.Can())
+	myr := downloader.Response.(*consumers.UserAccessResponse)
+	t.AssertEqual("poo is not in AllowedActions", myr.Message)
+}
+
 func (t *AppTest) TestConsumerUserServiceResponds_Can() {
 	uar := &consumers.UserAccessRequest{Username:"testuser", Project:"testproject", Action:"download"}
 	downloader := consumers.NewUserService("http://somewhere.net", *uar)
